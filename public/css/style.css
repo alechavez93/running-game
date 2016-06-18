@@ -1,0 +1,112 @@
+body{
+  background: #ededed;
+  margin: 0px;
+  font-family: orbitron;
+}
+
+.row{
+  height: 20px;
+}
+
+.game{
+  height:90vh;
+  width:100vw;
+}
+
+.bClick{
+  font-family: orbitron;
+  background: #80be1f;
+  color: black;
+  height: 40px;
+  width: 113px;
+  font-size: 14px;
+  line-height: 1.866;
+  border-radius: 10px;
+  border: black 1px solid;  
+}
+
+
+.bClick:hover{;
+  background-color: white; 
+}
+
+
+.input{
+  list-style: none;
+  position: absolute;
+  margin-left: -430px;
+  left: 50%;
+  top: 50%;
+  margin-top: 140px;
+
+}
+
+.field{
+    border-radius: 10px;
+    width: 140px;
+    height: 37px;
+    padding-left: 15px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    border: 1px solid #C2C2C2;
+    box-shadow: 1px 1px 4px #EBEBEB;
+    -moz-box-shadow: 1px 1px 4px #EBEBEB;
+    -webkit-box-shadow: 1px 1px 4px #EBEBEB;
+    outline: none;
+}
+
+li{
+  padding: 10px;
+  display: inline;
+}
+
+
+.scoreInput{
+  padding-left: 150px;
+  padding-right: -20px;
+}
+
+canvas{
+  background: white;
+  position: absolute;
+	border: black 1px solid;  
+  margin-left: -400px;
+  left: 50%;
+  top: 50%;
+  margin-top: -75px;
+}
+
+.top5{
+  width:auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: 300px;
+  margin-top: -110px;
+  border:1px solid #3f7f00;
+}
+
+td{
+  padding:2px;
+}
+
+.runningAnimation{
+  display: none;
+}
+
+.birdAnimation{
+  display: none;
+}
+
+.element{
+  display: none;
+}
+
+input{
+   font-family: orbitron;
+}
+
+.hidden{
+  visibility: hidden;
+}

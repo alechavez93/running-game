@@ -1,0 +1,139 @@
+body{
+	font-family: orbitron;
+}
+
+.topAlign{
+	margin-top: 20px;
+}
+
+.nomargin{
+	margin: 0px 0px 0px 0px;
+}
+
+#header{
+	height:700px;
+}
+
+.profilePic{
+	padding: 0px;
+	border: 5px solid #47C9AF;
+	margin-top: 17%;
+	border-radius: 30px;
+}
+
+.center{
+	text-align: center;
+}
+
+.welcome{
+	font-size:80px;
+	
+}
+
+#about{
+	height:680px;
+	background-color:#89f9ff;
+}
+
+.aboutText{
+	border-radius: 25px;
+	padding: 30px;
+	background-color: rgba(255, 255, 255, 0.5);
+	font-size: 21px;
+}
+
+.aboutHeader{
+	font-size: 46px;
+}
+
+#projects{
+
+	background-color:#e0e0e0;
+	height:850px;
+}
+
+.noDecoration{
+	text-decoration: none;
+	color: black;
+}
+
+a:hover{
+	text-decoration: none;
+}
+
+.project{
+	border-radius: 15px;
+	border: 3px solid #47C9AF;
+	background-color: white;
+	height: 200px;
+}
+
+.sectionBreak{
+	height:50px;
+}
+
+
+.projectTitle{
+	font-size: 20px;
+	color: #636363;
+}
+
+.projectImage{
+	height:110px;
+}
+
+#footer{
+	background-color: #353535;
+	height: 100px;
+}
+
+.round-box{
+	display: inline-block;
+	background: white;
+	border: 3px solid white;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	margin: 10px;
+	color:#353535;
+}
+
+.round-box:hover{
+	background: #47C9AF;
+	border: 3px solid white;
+	color: white;
+}
+
+.icon{
+	font-size: 28px;
+}
+
+.footerText{
+	margin-top:20px;
+	color:white;
+}
+
+.contactLink{
+	text-decoration: none;
+	color:white;
+}
+
+.contactLink:visited{
+	text-decoration: none;
+}
+
+.contactLink:hover{
+	color:#89f9ff;
+}
+
+.contactLink:focus{
+	text-decoration: none;
+	color:#89f9ff;
+}
+
+@media only screen and (min-width: 1366px){
+
+	
+}
+
+
