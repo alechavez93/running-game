@@ -1,17 +1,11 @@
 var fs = require("fs"),
 	js = "",
 	html = "",
-	css = "",
 	newFile;
 
 fs.readFile("js/script.js", function (err,data) {
   if (err) throw err;
   js += data;
-});
-
-fs.readFile("css/style.css", function (err,data) {
-  if (err) throw err;
-  css += data;
 });
 
 fs.readFile("index.html", function (err,data) {
@@ -20,8 +14,6 @@ fs.readFile("index.html", function (err,data) {
 });
 
 function newText(){
-	html = html.replace("<link rel=\"stylesheet\" href=\"css/style.css\">", "");
-	html = html.replace("/*Here goes style*/", css);
 	html = html.replace("<script src=\"js/script.js\"></script>", "");
 	html = html.replace("// Here goes script", js);
 

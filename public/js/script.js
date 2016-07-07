@@ -5,6 +5,7 @@ var ground = document.getElementById("ground");
 var background = document.getElementById("background");
 var userName;
 var scoresTable = document.getElementsByClassName("score");
+var socket = new io.connect();
 
 
 
@@ -55,7 +56,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$('#submit').slideUp(0);
 	$('#name').slideUp(0);
-	// updateTopScores();
+	updateTopScores();
 });
 
 
@@ -84,27 +85,20 @@ var s = setInterval(game, 15);
 
 
 //Main functions------------------------------------------------------------
-
-//Updates the topScores table
-function updateTopScores(){
-	if(!gameRunning){
-		$.ajax({
-	        url: "http://www.alejandrochavez93.com/runningGameFiles/scores.txt",
-	        async: false,   // asynchronous request? (synchronous requests are discouraged...)
-	        cache: false,   // with this, you can force the browser to not make cache of the retrieved data
-	        dataType: "text",  // jQuery will infer this, but you can set explicitly
-	        success: function( data, textStatus, jqXHR ) {
-	            topScores = data.split(" ");
-
-	            //Load our table in the html document
-	            for(var i=0; i<scoresTable.length; i++){
-	            	scoresTable[i].innerHTML = topScores[i];
-	            }
-	        }
-	    });
+function loadScores(data){
+	topScores = data.split(" ");
+	//Load our table in the html document
+	for(var i=0; i<scoresTable.length; i++){
+		scoresTable[i].innerHTML = topScores[i];
 	}
 }
 
+
+//Updates the topScores table
+function updateTopScores(){
+ 	socket.on("scores-update", loadScores);
+ 	socket.on("initial-load", loadScores);	
+}
 
 
 //Save new values in text
@@ -113,14 +107,7 @@ function saveNewScores(screen){
 	for(var i=0; i<topScores.length; i++){
 		myData += topScores[i] + " ";
 	}
-	$.ajax({
-	  	type: 'POST',
-	  	url: 'http://www.alejandrochavez93.com/runningGameFiles/fileWriter.php',
-	  	data: {score:score, screen: screen, text: myData, time: globalTime},
-	  	success: function(response){
-	  		console.log(response);
-	  	}
-	});
+	socket.emit("new-score", myData);
 }
 
 
@@ -199,7 +186,6 @@ function game(){
 	}
 	else if(!reachedTop && score!=0){
 		if(checkScore() != 20){
-			console.log(checkScore());
 			if(checkScore() != ''){
 				showInput();
 			}	
@@ -356,7 +342,7 @@ function drawObstacles(){
 
 
 
-//Checks if the element is at a save distance from last element placed
+//Checks if the element is at a safe distance from last element placed
 var c;
 function check(object){
 	c = true;

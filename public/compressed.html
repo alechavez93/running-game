@@ -2,6 +2,7 @@
 <html lang="en">
     <meta charset="UTF-8">
     <title>Running Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <meta property="og:image" content="http://www.alejandrochavez93.com/img/gameShot.PNG"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" 
 	<link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
@@ -10,120 +11,6 @@
 	<link rel="stylesheet" type="text/css" href="css/NavStyles.css">
 	<link rel="stylesheet" type="text/css" href="css/footer.css">
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-    <style>
-        body{
-  background: #ededed;
-  margin: 0px;
-  font-family: orbitron;
-}
-
-.row{
-  height: 20px;
-}
-
-.game{
-  height:90vh;
-  width:100vw;
-}
-
-.bClick{
-  font-family: orbitron;
-  background: #80be1f;
-  color: black;
-  height: 40px;
-  width: 113px;
-  font-size: 14px;
-  line-height: 1.866;
-  border-radius: 10px;
-  border: black 1px solid;  
-}
-
-
-.bClick:hover{;
-  background-color: white; 
-}
-
-
-.input{
-  list-style: none;
-  position: absolute;
-  margin-left: -430px;
-  left: 50%;
-  top: 50%;
-  margin-top: 140px;
-
-}
-
-.field{
-    border-radius: 10px;
-    width: 140px;
-    height: 37px;
-    padding-left: 15px;
-    box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    border: 1px solid #C2C2C2;
-    box-shadow: 1px 1px 4px #EBEBEB;
-    -moz-box-shadow: 1px 1px 4px #EBEBEB;
-    -webkit-box-shadow: 1px 1px 4px #EBEBEB;
-    outline: none;
-}
-
-li{
-  padding: 10px;
-  display: inline;
-}
-
-
-.scoreInput{
-  padding-left: 150px;
-  padding-right: -20px;
-}
-
-canvas{
-  background: white;
-  position: absolute;
-	border: black 1px solid;  
-  margin-left: -400px;
-  left: 50%;
-  top: 50%;
-  margin-top: -75px;
-}
-
-.top5{
-  width:auto;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: 300px;
-  margin-top: -110px;
-  border:1px solid #3f7f00;
-}
-
-td{
-  padding:2px;
-}
-
-.runningAnimation{
-  display: none;
-}
-
-.birdAnimation{
-  display: none;
-}
-
-.element{
-  display: none;
-}
-
-input{
-   font-family: orbitron;
-}
-
-.hidden{
-  visibility: hidden;
-}
-    </style>
 </head>
 <body style="margin:0px">
 	<div id='cssmenu' class="menu container navbar-fixed-top" style="width:100vw">
@@ -355,6 +242,7 @@ input{
 
 	<script src="https://code.jquery.com/jquery-latest.min.js"></script>
 	
+    <script src="socket.io/socket.io.js"></script>
     <script>
         var gameRunning = false;
 var canvas = document.getElementById("gameCanvas")
@@ -363,6 +251,7 @@ var ground = document.getElementById("ground");
 var background = document.getElementById("background");
 var userName;
 var scoresTable = document.getElementsByClassName("score");
+var socket = new io.connect();
 
 
 
@@ -413,7 +302,7 @@ $(document).ready(function(){
 $(document).ready(function(){
 	$('#submit').slideUp(0);
 	$('#name').slideUp(0);
-	// updateTopScores();
+	updateTopScores();
 });
 
 
@@ -442,27 +331,20 @@ var s = setInterval(game, 15);
 
 
 //Main functions------------------------------------------------------------
-
-//Updates the topScores table
-function updateTopScores(){
-	if(!gameRunning){
-		$.ajax({
-	        url: "http://www.alejandrochavez93.com/runningGameFiles/scores.txt",
-	        async: false,   // asynchronous request? (synchronous requests are discouraged...)
-	        cache: false,   // with this, you can force the browser to not make cache of the retrieved data
-	        dataType: "text",  // jQuery will infer this, but you can set explicitly
-	        success: function( data, textStatus, jqXHR ) {
-	            topScores = data.split(" ");
-
-	            //Load our table in the html document
-	            for(var i=0; i<scoresTable.length; i++){
-	            	scoresTable[i].innerHTML = topScores[i];
-	            }
-	        }
-	    });
+function loadScores(data){
+	topScores = data.split(" ");
+	//Load our table in the html document
+	for(var i=0; i<scoresTable.length; i++){
+		scoresTable[i].innerHTML = topScores[i];
 	}
 }
 
+
+//Updates the topScores table
+function updateTopScores(){
+ 	socket.on("scores-update", loadScores);
+ 	socket.on("initial-load", loadScores);	
+}
 
 
 //Save new values in text
@@ -471,14 +353,7 @@ function saveNewScores(screen){
 	for(var i=0; i<topScores.length; i++){
 		myData += topScores[i] + " ";
 	}
-	$.ajax({
-	  	type: 'POST',
-	  	url: 'http://www.alejandrochavez93.com/runningGameFiles/fileWriter.php',
-	  	data: {score:score, screen: screen, text: myData, time: globalTime},
-	  	success: function(response){
-	  		console.log(response);
-	  	}
-	});
+	socket.emit("new-score", myData);
 }
 
 
@@ -557,7 +432,6 @@ function game(){
 	}
 	else if(!reachedTop && score!=0){
 		if(checkScore() != 20){
-			console.log(checkScore());
 			if(checkScore() != ''){
 				showInput();
 			}	
@@ -714,7 +588,7 @@ function drawObstacles(){
 
 
 
-//Checks if the element is at a save distance from last element placed
+//Checks if the element is at a safe distance from last element placed
 var c;
 function check(object){
 	c = true;
