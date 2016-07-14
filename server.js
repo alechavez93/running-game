@@ -16,6 +16,6 @@ app.get("/", function(req, res){
 	res.sendFile(__dirname+"/public/compressed.html");
 });
 
-
+//Test comment
 //Start the scores handler
 score.startScoresHandler(io);
